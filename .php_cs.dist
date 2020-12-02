@@ -1,0 +1,29 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([__DIR__ . '/src', __DIR__ . '/tests']);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+                   'binary_operator_spaces'        => ['align_double_arrow' => true, 'align_equals' => true],
+                   'ordered_imports'               => true,
+                   'array_syntax'                  => ['syntax' => 'short'],
+                   'void_return'                   => true,
+                   'declare_strict_types'          => true,
+                   'yoda_style'                    => false,
+                   'phpdoc_annotation_without_dot' => false,
+                   'increment_style'               => ['style' => 'post'],
+                   'concat_space'                  => ['spacing' => 'one'],
+                   'no_superfluous_phpdoc_tags'    => false,
+                   'blank_line_before_return'      => true,
+                   'no_unused_imports'             => true,
+                   'single_blank_line_at_eof'      => true,
+                   'no_blank_lines_after_phpdoc'   => true,
+                   'no_empty_phpdoc'               => true,
+                   'phpdoc_order'                  => true,
+                   'phpdoc_separation'             => true,
+                   'blank_line_after_namespace'    => true,
+               ])
+    ->setFinder($finder)
+    ->setUsingCache(true);

@@ -1,0 +1,29 @@
+{
+  "name": "akravchuk/docker-php74-composer-phpunit",
+  "description": "Black docker project for console php 7.4 projects with composer and phpunit. Task review code",
+  "authors": [
+    {
+      "name": "Aleksandr Kravchuk",
+      "email": "aleksandr.kravchuk.os@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Review\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ReviewTest\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.1",
+    "phpstan/phpstan": "^0.12.18",
+    "friendsofphp/php-cs-fixer": "^2.16"
+  }
+}

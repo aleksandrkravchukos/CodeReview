@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  php-cli:
+    build: docker/php74-cli
+    container_name: php74-cli
+    working_dir: "/var/code/"
+    volumes:
+      - ./:/var/code:rw,cached
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
