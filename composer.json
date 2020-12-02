@@ -9,7 +9,12 @@
   ],
   "require": {
     "php": ">=7.4",
-    "ext-pdo": "*"
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-libxml": "*",
+    "ext-mbstring": "*",
+    "ext-xmlrpc": "*",
+    "ext-simplexml": "*"
   },
   "autoload": {
     "psr-4": {

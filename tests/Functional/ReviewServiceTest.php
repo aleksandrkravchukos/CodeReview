@@ -3,8 +3,6 @@
 namespace ReviewTest\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Review\Exception\ReviewException;
-use Review\Service\ReviewService;
 
 /**
  * Class InvestmentTest
@@ -12,21 +10,4 @@ use Review\Service\ReviewService;
 class ReviewServiceTest extends TestCase
 {
 
-    /**
-     * @var ReviewService
-     */
-    private $service;
-
-    protected function setUp(): void
-    {
-        $this->service = new ReviewService();
-    }
-
-    /**
-     * @test
-     */
-    public function someTest(): void
-    {
-
-    }
 }

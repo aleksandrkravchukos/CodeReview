@@ -9,10 +9,10 @@ RUN apt-get update \
     && docker-php-ext-install iconv zip opcache \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-install php-xmlrpc pdo_mysql mbstring zip exif pcntl
 
 RUN pecl install -o -f redis  \
-    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+    && echo "extension=xmlrpc.so" > /usr/local/etc/php/conf.d/xmlrpc.ini
 
 WORKDIR /code
 
