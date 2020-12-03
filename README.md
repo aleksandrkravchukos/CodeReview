@@ -14,12 +14,6 @@ Commands from Makefile could be executed manually in case Make utility is not in
 ## Build container.
 
     Make build
-
-## Copy dist configs
-
-If dist files are not copied to actual destination, then
-    
-    Make copy-dist-configs
     
 ## Run docker containers
 
@@ -29,6 +23,12 @@ If dist files are not copied to actual destination, then
 
     docker ps
 
+## Copy dist configs
+
+If dist files are not copied to actual destination, then
+    
+    Make copy-dist-configs
+    
 ## Install the composer dependencies
 
     Make vendors-install
