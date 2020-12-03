@@ -48,8 +48,9 @@ foreach ($argv as $parameter) {
 }
 
 $service = new Service\ReviewService();
+$fileService = new Service\FileService();
 
-$service->setInputFile($inputFile);
+$fileService->setInputFile($inputFile);
 $api = $service->getApiBinServiceUrl();
 $ratesApi = $service->getApiRatesServiceUrl();
 
@@ -93,8 +94,8 @@ $paramsRates = array_merge($paramsRates, $authApiRates);
 
 $amountFixedResult = [];
 $errors = [];
-if ($service->checkFileExist() && $service->checkFileIsReadable()) {
-    $content = explode(PHP_EOL, $service->getFileContent());
+if ($fileService->checkFileExist($inputFile) && $fileService->checkFileIsReadable($inputFile)) {
+    $content = explode(PHP_EOL, $fileService->getFileContent($inputFile));
 
     foreach ($content as $row) {
         $rowData = '';

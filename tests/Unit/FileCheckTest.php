@@ -3,12 +3,12 @@
 namespace ReviewTest\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Review\Service\ReviewService;
+use Review\Service\FileService;
 
 class FileCheckTest extends TestCase
 {
     /**
-     * @var ReviewService
+     * @var FileService
      */
     private $service;
 
@@ -29,7 +29,7 @@ class FileCheckTest extends TestCase
     {
         $this->inputFile           = '/var/code/input.txt';
         $this->inputNotExistedFile = '/var/code/input2.txt';
-        $this->service             = new ReviewService();
+        $this->service             = new FileService();
     }
 
     /**
@@ -38,8 +38,8 @@ class FileCheckTest extends TestCase
     public function testInputFileExist(): void
     {
         $this->service->setInputFile($this->inputFile);
-        $fileExist = $this->service->checkFileExist();
-        $this->assertFileExists($this->service->getInputFile());
+        $fileExist = $this->service->checkFileExist($this->inputFile );
+        $this->assertFileExists($this->inputFile);
         $this->assertEquals($fileExist, true);
     }
 
@@ -49,7 +49,7 @@ class FileCheckTest extends TestCase
     public function testInputFileDoesNotExist(): void
     {
         $this->service->setInputFile($this->inputNotExistedFile);
-        $fileDoesNotExist = $this->service->checkFileExist();
+        $fileDoesNotExist = $this->service->checkFileExist($this->inputNotExistedFile);
         $this->assertFileDoesNotExist($this->service->getInputFile());
         $this->assertEquals($fileDoesNotExist, false);
     }
@@ -59,10 +59,9 @@ class FileCheckTest extends TestCase
      */
     public function testFileIsReadable(): void
     {
-        $this->service->setInputFile($this->inputFile);
-        $readable = $this->service->checkFileIsReadable();
+        $readable = $this->service->checkFileIsReadable($this->inputFile);
 
-        $this->assertFileIsReadable($this->service->getInputFile());
+        $this->assertFileIsReadable($this->inputFile);
         $this->assertEquals($readable, true);
     }
 
@@ -78,8 +77,7 @@ class FileCheckTest extends TestCase
 {"bin":"41417360","amount":"130.00","currency":"USD"}
 {"bin":"4745030","amount":"2000.00","currency":"GBP"}';
 
-        $this->service->setInputFile($this->inputFile);
-        $content = $this->service->getFileContent();
+        $content = $this->service->getFileContent($this->inputFile);
 
         $this->assertEquals($content, $expectedText);
     }

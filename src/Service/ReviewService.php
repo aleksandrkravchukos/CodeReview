@@ -40,69 +40,8 @@ class ReviewService
     public function __construct()
     {
         $this->guzzle = new Client();
-    }
-
-    /**
-     * Get current input file.
-     *
-     * @return string
-     */
-    public function getInputFile(): string
-    {
-        return $this->inputFile;
-    }
-
-    /**
-     * Set input file of service.
-     *
-     * @param string $inputFile
-     *
-     * @return ReviewService
-     */
-    public function setInputFile(string $inputFile): ReviewService
-    {
         $this->setApiBinServiceUrl(self::DEFAULT_API_BIN_SERVICE);
         $this->setApiRatesServiceUrl(self::DEFAULT_API_RATES_SERVICE);
-        $this->inputFile = $inputFile;
-
-        return $this;
-    }
-
-    /**
-     * Check if input file exist.
-     *
-     * @return bool
-     */
-    public function checkFileExist(): bool
-    {
-        return file_exists($this->getInputFile());
-    }
-
-    /**
-     * Check if input file is readable.
-     *
-     * @return bool
-     */
-    public function checkFileIsReadable(): bool
-    {
-        return is_readable($this->getInputFile());
-    }
-
-    /*
-     * Get service content.
-     *
-     * @param string $fileName
-     * @return string
-     */
-    public function getFileContent(): string
-    {
-        $content = '';
-
-        if ($this->checkFileExist()) {
-            $content = file_get_contents($this->getInputFile());
-        }
-
-        return $content;
     }
 
     /**
