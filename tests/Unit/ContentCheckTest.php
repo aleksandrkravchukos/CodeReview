@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace ReviewTest\Unit;
 
@@ -23,9 +23,9 @@ class ContentCheckTest extends TestCase
     /**
      * @test
      */
-    public function testIsJsonString()
+    public function testIsJsonString(): void
     {
-        $validContent = '{"bin":"45717360","amount":"100.00","currency":"EUR"}';
+        $validContent    = '{"bin":"45717360","amount":"100.00","currency":"EUR"}';
         $notValidContent = '{"bin":"45717360", amount":"100.00","currency":"EUR"};';
 
         $isValidContent = $this->service->isJsonString($validContent);
@@ -38,7 +38,7 @@ class ContentCheckTest extends TestCase
     /**
      * @test
      */
-    public function testValidateRowData()
+    public function testValidateRowData(): void
     {
         $validData = $this->service->validate(json_decode('{"bin":"45717360","amount":"100.00","currency":"EUR"}', true));
         $this->assertEquals($validData, true);
@@ -51,7 +51,7 @@ class ContentCheckTest extends TestCase
     /**
      * @test
      */
-    public function testisEuropeanCode()
+    public function testisEuropeanCode(): void
     {
         $alpha2 = $this->service->isEuropeanCode('UA');
         $this->assertEquals($alpha2, false);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace ReviewTest\Unit;
 
@@ -27,15 +27,15 @@ class FileCheckTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->inputFile = '/var/code/input.txt';
+        $this->inputFile           = '/var/code/input.txt';
         $this->inputNotExistedFile = '/var/code/input2.txt';
-        $this->service = new ReviewService();
+        $this->service             = new ReviewService();
     }
 
     /**
      * @test
      */
-    public function testInputFileExist()
+    public function testInputFileExist(): void
     {
         $this->service->setInputFile($this->inputFile);
         $fileExist = $this->service->checkFileExist();
@@ -46,7 +46,7 @@ class FileCheckTest extends TestCase
     /**
      * @test
      */
-    public function testInputFileDoesNotExist()
+    public function testInputFileDoesNotExist(): void
     {
         $this->service->setInputFile($this->inputNotExistedFile);
         $fileDoesNotExist = $this->service->checkFileExist();
@@ -57,7 +57,7 @@ class FileCheckTest extends TestCase
     /**
      * @test
      */
-    public function testFileIsReadable()
+    public function testFileIsReadable(): void
     {
         $this->service->setInputFile($this->inputFile);
         $readable = $this->service->checkFileIsReadable();
@@ -69,7 +69,7 @@ class FileCheckTest extends TestCase
     /**
      * @test
      */
-    public function testGetFileContent()
+    public function testGetFileContent(): void
     {
         $expectedText =
 '{"bin":"45717360","amount":"100.00","currency":"EUR"}

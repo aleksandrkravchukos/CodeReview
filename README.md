@@ -43,8 +43,8 @@ Static analysis check
     Make static-analysis
     
 ## Run cs-fixer
-cs-fix:
-	docker-compose run --rm --no-deps php-cli ./vendor/bin/php-cs-fixer fix
+    
+    docker-compose run --rm --no-deps php-cli ./vendor/bin/php-cs-fixer fix
 	    
 ## Results
 

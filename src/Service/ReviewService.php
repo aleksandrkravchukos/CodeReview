@@ -7,8 +7,8 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ReviewService
 {
-    const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
-    const DEFAULT_API_BIN_SERVICE = 'https://lookup.binlist.net/';
+    const EU_ALPHA2_CODES           = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
+    const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
 
     /**
@@ -55,6 +55,7 @@ class ReviewService
      * Set input file of service.
      *
      * @param string $inputFile
+     *
      * @return ReviewService
      */
     public function setInputFile(string $inputFile): ReviewService
@@ -107,6 +108,7 @@ class ReviewService
      * Check if json is valid.
      *
      * @param string $content
+     *
      * @return bool
      */
     public function isJsonString(string $content): bool
@@ -130,6 +132,7 @@ class ReviewService
      * Set api bin service url.
      *
      * @param string $apiBinServiceUrl
+     *
      * @return ReviewService
      */
     public function setApiBinServiceUrl(string $apiBinServiceUrl): ReviewService
@@ -153,11 +156,13 @@ class ReviewService
      * Set api rates service url.
      *
      * @param string $apiRatesServiceUrl
+     *
      * @return ReviewService
      */
     public function setApiRatesServiceUrl(string $apiRatesServiceUrl): ReviewService
     {
         $this->apiRatesServiceUrl = $apiRatesServiceUrl;
+
         return $this;
     }
 
@@ -165,6 +170,7 @@ class ReviewService
      * Validate file row data.
      *
      * @param array $rowData
+     *
      * @return bool
      */
     public function validate(array $rowData): bool
@@ -176,6 +182,7 @@ class ReviewService
      * Validate file row data.
      *
      * @param array|null $rowData
+     *
      * @return bool|null
      */
     public function isArrayRowData(?array $rowData): ?bool
@@ -189,6 +196,7 @@ class ReviewService
      * @param array $rowData
      * @param float $rate
      * @param bool $isEu
+     *
      * @return float
      */
     public function calculateAmount(array $rowData, float $rate, bool $isEu): float
@@ -206,6 +214,7 @@ class ReviewService
      * Check code country alpha2 is European.
      *
      * @param string $alpha2
+     *
      * @return bool
      */
     public function isEuropeanCode(string $alpha2): bool
@@ -219,22 +228,23 @@ class ReviewService
      * @param string $apiServiceUrl
      * @param string $method
      * @param array $params
+     *
      * @return array
      */
     public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
     {
-        $result = '';
+        $result  = '';
         $success = true;
         try {
             $request = $this->guzzle->request($method, $apiServiceUrl, $params);
-            $result = json_decode($request->getBody()->getContents(), true);
+            $result  = json_decode($request->getBody()->getContents(), true);
         } catch (GuzzleException $exception) {
             $success = false;
         }
 
         return [
             'success' => $success,
-            'result' => $result,
+            'result'  => $result,
         ];
     }
 }
