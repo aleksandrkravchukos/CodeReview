@@ -62,7 +62,7 @@ class ReviewService
     {
         $amountFixed = strval($rowData['amount']);
 
-        if (($rowData['currency'] !== 'EUR' && $rate > 0)) {
+        if (($rowData['currency'] !== self::EUR && $rate > 0)) {
             $amountFixed = bcdiv(strval($rowData['amount']), $rate, $scale);
         }
 
