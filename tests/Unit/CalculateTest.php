@@ -2,7 +2,6 @@
 
 namespace ReviewTest\Unit;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Review\Service\ReviewService;
 
@@ -12,11 +11,6 @@ class CalculateTest extends TestCase
      * @var ReviewService
      */
     private $service;
-
-    /**
-     * @var MockObject
-     */
-    private $reviewServiceMock;
 
     /**
      * @var int
