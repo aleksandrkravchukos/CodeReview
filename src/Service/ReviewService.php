@@ -131,15 +131,14 @@ class ReviewService
      * @param string $rate
      * @param bool $isEu
      *
+     * @param int $scale
      * @return string
      */
-    public function calculateAmount(array $rowData, string $rate, bool $isEu): string
+    public function calculateAmount(array $rowData, string $rate, bool $isEu, int $scale): string
     {
         $amountFixed = strval($rowData['amount']);
-        $scale = 5;
 
         if (($rowData['currency'] !== 'EUR' && $rate > 0)) {
-            $scale = 40;
             $amountFixed = bcdiv(strval($rowData['amount']), $rate, $scale);
         }
 

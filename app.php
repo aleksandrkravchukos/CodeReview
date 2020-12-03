@@ -12,6 +12,7 @@ $authBin = [];
 $authRates = [];
 $apiBinUrl = '';
 $apiRatesUrl = '';
+$scale = 40;
 foreach ($argv as $parameter) {
 
     if (strpos($parameter, '--authBinLogin') !== false) {
@@ -44,6 +45,10 @@ foreach ($argv as $parameter) {
 
     if (strpos($parameter, '--apiRatesUrl') !== false) {
         $apiRatesUrl = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--scale') !== false) {
+        $scale = explode('=', $parameter)[1];
     }
 }
 
@@ -128,7 +133,7 @@ if ($fileService->checkFileExist($inputFile) && $fileService->checkFileIsReadabl
                             $isEu = $service->isEuropeanCode($decodedResults['country']['alpha2']);
                         }
 
-                        $amountFixedResult[] = $service->calculateAmount($rowData, $rate, $isEu);
+                        $amountFixedResult[] = $service->calculateAmount($rowData, $rate, $isEu, $scale);
                     }
                 }
             } catch (Exception $exception) {

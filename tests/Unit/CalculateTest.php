@@ -13,11 +13,16 @@ class CalculateTest extends TestCase
     private $service;
 
     /**
+     * @var int
+     */
+    private $scale;
+    /**
      * Constructor in every test.
      */
     protected function setUp(): void
     {
         $this->service = new ReviewService();
+        $this->scale = 50;
     }
 
     /**
@@ -28,7 +33,7 @@ class CalculateTest extends TestCase
         $rowData = json_decode('{"bin":"45717360","amount":"120.00","currency":"EUR"}', true);
         $rate = 0;
         $isEu = true;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu);
+        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
         $this->assertEquals($amountFixed, 1.20000);
     }
 
@@ -40,8 +45,8 @@ class CalculateTest extends TestCase
         $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
         $rate = 1.206609878678678687;
         $isEu = true;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu);
-        $this->assertEquals($amountFixed, 0.4143841425759962843878452997265860234202);
+        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
+        $this->assertEquals($amountFixed, 0.41438414257599628438784529972658602342021110646394);
     }
 
     /**
@@ -52,7 +57,7 @@ class CalculateTest extends TestCase
         $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
         $rate = 0;
         $isEu = true;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu);
+        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
         $this->assertEquals($amountFixed, 0.5);
     }
 
@@ -64,8 +69,8 @@ class CalculateTest extends TestCase
         $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
         $rate = 1.2067876987899787123123234;
         $isEu = false;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu);
-        $this->assertEquals($amountFixed, 0.8286461661837138886005333044135644557368);
+        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
+        $this->assertEquals($amountFixed, 0.82864616618371388860053330441356445573684003527843);
     }
 
     /**
@@ -76,7 +81,7 @@ class CalculateTest extends TestCase
         $rowData = json_decode('{"bin":"516793","amount":"500.00","currency":"EUR"}', true);
         $rate = 10.23487239848920348092834902984590;
         $isEu = true;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu);
+        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
         $this->assertEquals($amountFixed, 5);
     }
 
