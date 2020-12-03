@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ReviewTest\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -23,6 +22,9 @@ class FileCheckTest extends TestCase
      */
     private $inputNotExistedFile;
 
+    /**
+     * Constructor in every test.
+     */
     protected function setUp(): void
     {
         $this->inputFile = '/var/code/input.txt';

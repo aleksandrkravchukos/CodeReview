@@ -13,8 +13,7 @@
     "ext-json": "*",
     "ext-libxml": "*",
     "ext-mbstring": "*",
-    "ext-xmlrpc": "*",
-    "ext-simplexml": "*"
+    "guzzlehttp/guzzle": "^7.2"
   },
   "autoload": {
     "psr-4": {

@@ -2,6 +2,9 @@
 
 namespace Review\Service;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+
 class ReviewService
 {
     const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
@@ -24,6 +27,19 @@ class ReviewService
      * @var string
      */
     private $apiRatesServiceUrl;
+
+    /**
+     * @var Client
+     */
+    private $guzzle;
+
+    /**
+     * ReviewService constructor.
+     */
+    public function __construct()
+    {
+        $this->guzzle = new Client();
+    }
 
     /**
      * Get current input file.
@@ -195,5 +211,30 @@ class ReviewService
     public function isEuropeanCode(string $alpha2): bool
     {
         return in_array($alpha2, self::EU_ALPHA2_CODES);
+    }
+
+    /**
+     * Get data from api service.
+     *
+     * @param string $apiServiceUrl
+     * @param string $method
+     * @param array $params
+     * @return array
+     */
+    public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
+    {
+        $result = '';
+        $success = true;
+        try {
+            $request = $this->guzzle->request($method, $apiServiceUrl, $params);
+            $result = json_decode($request->getBody()->getContents(), true);
+        } catch (GuzzleException $exception) {
+            $success = false;
+        }
+
+        return [
+            'success' => $success,
+            'result' => $result,
+        ];
     }
 }

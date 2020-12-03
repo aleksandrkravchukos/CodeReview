@@ -8,21 +8,88 @@ require __DIR__ . '/vendor/autoload.php';
 
 $inputFile = $argv[1];
 
+$authBin = [];
+$authRates = [];
+$apiBinUrl = '';
+$apiRatesUrl = '';
+foreach ($argv as $parameter) {
+
+    if (strpos($parameter, '--authBinLogin') !== false) {
+        $authBin['auth']['login'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--authBinPassword') !== false) {
+        $authBin['auth']['password'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--authBinType') !== false) {
+        $authBin['auth']['type'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--authRatesLogin') !== false) {
+        $authRates['auth']['login'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--authRatesPassword') !== false) {
+        $authRates['auth']['password'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--authRatesType') !== false) {
+        $authRates['auth']['type'] = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--apiBinUrl') !== false) {
+        $apiBinUrl = explode('=', $parameter)[1];
+    }
+
+    if (strpos($parameter, '--apiRatesUrl') !== false) {
+        $apiRatesUrl = explode('=', $parameter)[1];
+    }
+}
+
 $service = new Service\ReviewService();
 
 $service->setInputFile($inputFile);
 $api = $service->getApiBinServiceUrl();
 $ratesApi = $service->getApiRatesServiceUrl();
 
-if (isset($argv[2])) {
-    $api = $argv[2];
-    $service->setApiBinServiceUrl($argv[2]);
+$authApiBin = [];
+$paramsBin = [];
+if ($apiBinUrl !== '') {
+    $api = $apiBinUrl;
+    $service->setApiBinServiceUrl($apiBinUrl);
+
+    if (isset($authBin['auth']['login']) && isset($authBin['auth']['password']) && isset($authBin['auth']['type'])) {
+        $authApiBin = [
+            'auth' => [
+                $authBin['auth']['login'],
+                $authBin['auth']['password'],
+                $authBin['auth']['type'],
+            ]
+        ];
+    }
 }
 
-if (isset($argv[3])) {
-    $ratesApi = $argv[3];
-    $service->setApiRatesServiceUrl($argv[2]);
+$paramsBin = array_merge($paramsBin, $authApiBin);
+
+$authApiRates = [];
+$paramsRates = [];
+if ($apiRatesUrl !== '') {
+    $ratesApi = $apiRatesUrl;
+    $service->setApiRatesServiceUrl($apiRatesUrl);
+
+    if (isset($authBin['auth']['login']) && isset($authBin['auth']['password']) && isset($authBin['auth']['type'])) {
+        $authApiRates = [
+            'auth' => [
+                $paramsRates['auth']['login'],
+                $paramsRates['auth']['password'],
+                $paramsRates['auth']['type'],
+            ]
+        ];
+    }
 }
+
+$paramsRates = array_merge($paramsRates, $authApiRates);
 
 $amountFixedResult = [];
 $errors = [];
@@ -37,27 +104,31 @@ if ($service->checkFileExist() && $service->checkFileIsReadable()) {
 
         if ($service->isArrayRowData($rowData) && $service->validate($rowData)) {
             try {
-                $binResults = file_get_contents($api . $rowData['bin']);
-
-                if (!$binResults) {
-                    $errors[] = 'bin ' . $rowData['bin'] . ' have no results';
+                $binResults = $service->getApiServiceData($api. $rowData['bin'], $paramsBin);
+                if (!$binResults['success']) {
+                    $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results from bit api';
                 } else {
 
-                    $decodedResults = @json_decode($binResults);
+                    $decodedResults = $binResults['result'];
 
-                    $getRate = @json_decode(file_get_contents($ratesApi), true);
+                    $getRate = $service->getApiServiceData($ratesApi, $paramsRates);
 
-                    $rate = 0;
-                    if (isset($getRate['rates'][$rowData['currency']])) {
-                        $rate = $getRate['rates'][$rowData['currency']];
+                    if (!$getRate['success']) {
+                        $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results rates api';
+                    } else {
+                        $rate = 0;
+                        if (isset($getRate['result']['rates'][$rowData['currency']])) {
+                            $rate = $getRate['result']['rates'][$rowData['currency']];
+                        }
+
+                        $isEu = false;
+
+                        if (isset($decodedResults['country']['alpha2'])) {
+                            $isEu = $service->isEuropeanCode($decodedResults['country']['alpha2']);
+                        }
+
+                        $amountFixedResult[] = $service->calculateAmount($rowData, $rate, $isEu);
                     }
-
-                    $isEu = false;
-                    if (isset($decodedResults->country->alpha2)) {
-                        $isEu = $service->isEuropeanCode($decodedResults->country->alpha2);
-                    }
-
-                    $amountFixedResult[] = $service->calculateAmount($rowData, $rate, $isEu);
                 }
             } catch (Exception $exception) {
                 $errors[] = $exception->getMessage();

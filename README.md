@@ -46,4 +46,18 @@ Static analysis check
 cs-fix:
 	docker-compose run --rm --no-deps php-cli ./vendor/bin/php-cs-fixer fix
 	    
-## Algorithm
+## Results
+
+Input data variants 
+   with auth Bin service
+
+    docker exec -it php74-cli php app.php input.txt --apiBinUrl=https://lookup.binlist.net/ --authBinType=basic --authBinLogin=admin --authBinPassword=pass
+    
+   without any auth
+    
+    docker exec -it php74-cli php app.php input.txt --apiBinUrl=https://lookup.binlist.net/ --apiRatesUrl=https://api.exchangeratesapi.io/latest
+    
+  with auth in both service
+   
+    docker exec -it php74-cli php app.php input.txt --apiBinUrl=https://lookup.binlist.net/ --apiRatesUrl=https://api.exchangeratesapi.io/latest --authBinType=basic --authBinLogin=admin --authBinPassword=pass --authRatesType=basic --authRatesLogin=admin --authRatesPassword=pass
+    

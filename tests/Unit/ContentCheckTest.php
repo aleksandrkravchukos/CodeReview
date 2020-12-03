@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ReviewTest\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -13,6 +12,9 @@ class ContentCheckTest extends TestCase
      */
     private $service;
 
+    /**
+     * Constructor in every test.
+     */
     protected function setUp(): void
     {
         $this->service = new ReviewService();

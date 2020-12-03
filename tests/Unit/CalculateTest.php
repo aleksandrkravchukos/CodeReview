@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ReviewTest\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -13,6 +12,9 @@ class CalculateTest extends TestCase
      */
     private $service;
 
+    /**
+     * Constructor in every test.
+     */
     protected function setUp(): void
     {
         $this->service = new ReviewService();
@@ -36,10 +38,22 @@ class CalculateTest extends TestCase
         $this->assertEquals($amountFixed, 0.41438753522294053);
 
         $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
+        $rate = 1.2067;
+        $isEu = true;
+        $amountFixed = $this->service->calculateAmount($rowData, $rate, $isEu);
+        $this->assertEquals($amountFixed, 0.4143531946631308);
+
+        $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
         $rate = 10;
         $isEu = false;
         $amountFixed = $this->service->calculateAmount($rowData, $rate, $isEu);
         $this->assertEquals($amountFixed, 0.1);
+
+        $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"KAD"}', true);
+        $rate = 1.2067;
+        $isEu = false;
+        $amountFixed = $this->service->calculateAmount($rowData, $rate, $isEu);
+        $this->assertEquals($amountFixed, 0.8287063893262616);
 
         $rowData = json_decode('{"bin":"516793","amount":"50.00","currency":"USD"}', true);
         $rate = 0;
