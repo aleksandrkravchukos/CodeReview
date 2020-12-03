@@ -2,7 +2,6 @@
 
 namespace ReviewTest\Unit;
 
-use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Review\Service\ReviewService;
 

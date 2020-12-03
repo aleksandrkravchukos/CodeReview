@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ApiService
 {
-    const DEFAULT_API_BIN_SERVICE = 'https://lookup.binlist.net/';
+    const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
 
     /**
@@ -27,6 +27,7 @@ class ApiService
 
     /**
      * ApiService constructor.
+     *
      * @param Client $client
      */
     public function __construct(Client $client)
@@ -71,18 +72,18 @@ class ApiService
      */
     public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
     {
-        $result = '';
+        $result  = '';
         $success = true;
         try {
             $request = $this->guzzle->request($method, $apiServiceUrl, $params);
-            $result = json_decode($request->getBody()->getContents(), true);
+            $result  = json_decode($request->getBody()->getContents(), true);
         } catch (GuzzleException $exception) {
             $success = false;
         }
 
         return [
             'success' => $success,
-            'result' => $result,
+            'result'  => $result,
         ];
     }
 

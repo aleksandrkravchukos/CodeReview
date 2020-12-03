@@ -4,6 +4,7 @@ namespace ReviewTest\Unit;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
+use Review\Service\ApiService;
 use Review\Service\FileService;
 use Review\Service\ReviewService;
 
@@ -33,6 +34,10 @@ class ReviewServiceTest extends TestCase
      */
     private $inputNotExistedFile;
 
+    /**
+     * @var ApiService
+     */
+    private $apiService;
 
     /**
      * @var string
@@ -52,10 +57,11 @@ class ReviewServiceTest extends TestCase
         $this->inputFile           = '/var/code/input.txt';
         $this->inputNotExistedFile = '/var/code/input2.txt';
         $this->fileService         = new FileService();
-        $this->reviewService       = new ReviewService(new Client);
+        $this->reviewService       = new ReviewService();
+        $this->apiService          = new ApiService(new Client);
 
-        $this->apiBinServiceDefaultUrl   = ReviewService::DEFAULT_API_BIN_SERVICE;
-        $this->apiRatesServiceDefaultUrl = ReviewService::DEFAULT_API_RATES_SERVICE;
+        $this->apiBinServiceDefaultUrl   = ApiService::DEFAULT_API_BIN_SERVICE;
+        $this->apiRatesServiceDefaultUrl = ApiService::DEFAULT_API_RATES_SERVICE;
     }
 
     /**
@@ -72,13 +78,13 @@ class ReviewServiceTest extends TestCase
         $this->assertEquals($this->fileService, $result);
 
         $testUrl = 'https://lookup.binlist.net/';
-        $result  = $this->reviewService->setApiBinServiceUrl($testUrl);
-        $this->assertEquals($this->reviewService, $result);
+        $result  = $this->apiService->setApiBinServiceUrl($testUrl);
+        $this->assertEquals($this->apiService, $result);
 
         $testUrl = 'https://api.exchangeratesapi.io/latest';
 
-        $result = $this->reviewService->setApiRatesServiceUrl($testUrl);
-        $this->assertEquals($this->reviewService, $result);
+        $result = $this->apiService->setApiRatesServiceUrl($testUrl);
+        $this->assertEquals($this->apiService, $result);
 
         $rowData = json_decode('{"bin":"45717360","amount":"100.00","currency":"EUR"}', true);
 

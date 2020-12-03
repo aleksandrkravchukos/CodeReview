@@ -6,9 +6,9 @@ class ReviewService
 {
     const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
 
-    const PERCENT_EU = "0.01";
+    const PERCENT_EU     = "0.01";
     const PERCENT_NOT_EU = "0.02";
-    const EUR = "EUR";
+    const EUR            = "EUR";
 
     /**
      * Check if json is valid.

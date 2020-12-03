@@ -28,9 +28,9 @@ class CheckApiTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->apiBinUrl = 'https://lookup.binlist.net/';
+        $this->apiBinUrl   = 'https://lookup.binlist.net/';
         $this->apiRatesUrl = 'https://api.exchangeratesapi.io/latest';
-        $this->service = new ApiService(new Client);
+        $this->service     = new ApiService(new Client);
     }
 
     /**
