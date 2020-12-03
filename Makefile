@@ -10,6 +10,13 @@ vendors-install:
 vendors-update:
 	docker-compose run --rm --no-deps php-cli composer update
 
+## Docker containers up
+up:
+	docker-compose up -d
+
+## Docker containers up
+check:
+	docker ps
 
 ## Copy dist files to actual path (if not present yet)
 copy-dist-configs:

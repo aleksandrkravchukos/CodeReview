@@ -17,11 +17,11 @@ Commands from Makefile could be executed manually in case Make utility is not in
     
 ## Run docker containers
 
-    docker-compose up -d
+    Make up
     
 ## Check docker containers
 
-    docker ps
+    Make check
 
 ## Copy dist configs
 
