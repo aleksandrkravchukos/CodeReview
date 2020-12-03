@@ -3,7 +3,6 @@
 namespace Review;
 
 use Exception;
-use Review\Service\ReviewService;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -25,54 +24,43 @@ if (isset($argv[3])) {
     $service->setApiRatesServiceUrl($argv[2]);
 }
 
+$amountFixedResult = [];
 $errors = [];
-
 if ($service->checkFileExist() && $service->checkFileIsReadable()) {
-    $content = explode("\n", $service->getFileContent());
+    $content = explode(PHP_EOL, $service->getFileContent());
 
     foreach ($content as $row) {
         $rowData = '';
         if ($service->isJsonString(trim($row))) {
-            $rowData = json_decode($row);
+            $rowData = json_decode($row, true);
         }
 
-        if ($service->isValidXML(trim($row))) {
-            // TODO: implement xml input data
-        }
-
-        if (isset($rowData->bin) && isset($rowData->amount) && isset($rowData->currency)) {
+        if ($service->isArrayRowData($rowData) && $service->validate($rowData)) {
             try {
-                $binResults = file_get_contents($api . $rowData->bin);
+                $binResults = file_get_contents($api . $rowData['bin']);
+
+                if (!$binResults) {
+                    $errors[] = 'bin ' . $rowData['bin'] . ' have no results';
+                } else {
+
+                    $decodedResults = @json_decode($binResults);
+
+                    $getRate = @json_decode(file_get_contents($ratesApi), true);
+
+                    $rate = 0;
+                    if (isset($getRate['rates'][$rowData['currency']])) {
+                        $rate = $getRate['rates'][$rowData['currency']];
+                    }
+
+                    $isEu = false;
+                    if (isset($decodedResults->country->alpha2)) {
+                        $isEu = $service->isEuropeanCode($decodedResults->country->alpha2);
+                    }
+
+                    $amountFixedResult[] = $service->calculateAmount($rowData, $rate, $isEu);
+                }
             } catch (Exception $exception) {
                 $errors[] = $exception->getMessage();
-                continue;
-            }
-
-            if (!$binResults) {
-                $errors[] = 'bin ' . $rowData['bin'] . ' have no results';
-            } else {
-
-                $decodedResults = json_decode($binResults);
-                $isEu = in_array($decodedResults->country->alpha2, ReviewService::EU_ALPHA2_CODES);
-
-                try {
-                    $getRate = @json_decode(file_get_contents($ratesApi), true);
-                } catch (Exception $exception) {
-                    $errors[] = 'Response from rates api - ' . $exception->getMessage();
-                    continue;
-                }
-                $rate = 0;
-                if (isset($getRate[['rates'][$rowData->currency]])) {
-                    $rate = $getRate[['rates'][$rowData->currency]];
-                }
-
-                $amountFixed = $rowData->amount;
-
-                if ($rowData->currency !== 'EUR' && $rate > 0) {
-                    $amountFixed = $rowData->amount / $rate;
-                }
-
-                echo $amountFixed * ($isEu ? 0.01 : 0.02) . PHP_EOL;
             }
         } else {
             $errors[] = $row . ' is not valid';
@@ -82,7 +70,10 @@ if ($service->checkFileExist() && $service->checkFileIsReadable()) {
 } else {
     $errors[] = "File doesn't exist or not readable";
 }
-
 if ($errors) {
     print_r($errors);
+}
+
+if ($amountFixedResult) {
+    print_r($amountFixedResult);
 }

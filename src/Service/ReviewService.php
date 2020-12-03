@@ -4,7 +4,6 @@ namespace Review\Service;
 
 class ReviewService
 {
-
     const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
     const DEFAULT_API_BIN_SERVICE = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
@@ -27,14 +26,18 @@ class ReviewService
     private $apiRatesServiceUrl;
 
     /**
+     * Get current input file.
+     *
      * @return string
      */
-    public function getInputFile()
+    public function getInputFile(): string
     {
         return $this->inputFile;
     }
 
     /**
+     * Set input file of service.
+     *
      * @param string $inputFile
      * @return ReviewService
      */
@@ -43,6 +46,7 @@ class ReviewService
         $this->setApiBinServiceUrl(self::DEFAULT_API_BIN_SERVICE);
         $this->setApiRatesServiceUrl(self::DEFAULT_API_RATES_SERVICE);
         $this->inputFile = $inputFile;
+
         return $this;
     }
 
@@ -57,7 +61,7 @@ class ReviewService
     }
 
     /**
-     * Check if input file exist.
+     * Check if input file is readable.
      *
      * @return bool
      */
@@ -67,6 +71,8 @@ class ReviewService
     }
 
     /*
+     * Get service content.
+     *
      * @param string $fileName
      * @return string
      */
@@ -81,6 +87,12 @@ class ReviewService
         return $content;
     }
 
+    /**
+     * Check if json is valid.
+     *
+     * @param string $content
+     * @return bool
+     */
     public function isJsonString(string $content): bool
     {
         json_decode(trim($content));
@@ -88,18 +100,9 @@ class ReviewService
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
-    public function isValidXML(string $content): bool
-    {
-        $isXml = true;
-        $doc = @simplexml_load_string($content);
-        if (!$doc) {
-            $isXml = false;
-        }
-
-        return $isXml;
-    }
-
     /**
+     * Get api bin service url.
+     *
      * @return string
      */
     public function getApiBinServiceUrl(): string
@@ -108,6 +111,8 @@ class ReviewService
     }
 
     /**
+     * Set api bin service url.
+     *
      * @param string $apiBinServiceUrl
      * @return ReviewService
      */
@@ -119,6 +124,8 @@ class ReviewService
     }
 
     /**
+     * Get api rates service url.
+     *
      * @return string
      */
     public function getApiRatesServiceUrl(): string
@@ -127,6 +134,8 @@ class ReviewService
     }
 
     /**
+     * Set api rates service url.
+     *
      * @param string $apiRatesServiceUrl
      * @return ReviewService
      */
@@ -136,4 +145,55 @@ class ReviewService
         return $this;
     }
 
+    /**
+     * Validate file row data.
+     *
+     * @param array $rowData
+     * @return bool
+     */
+    public function validate(array $rowData): bool
+    {
+        return isset($rowData['bin']) && isset($rowData['amount']) && isset($rowData['currency']);
+    }
+
+    /**
+     * Validate file row data.
+     *
+     * @param array|null $rowData
+     * @return bool|null
+     */
+    public function isArrayRowData(?array $rowData): ?bool
+    {
+        return is_array($rowData);
+    }
+
+    /**
+     * Calculate amount fixed.
+     *
+     * @param array $rowData
+     * @param float $rate
+     * @param bool $isEu
+     * @return float
+     */
+    public function calculateAmount(array $rowData, float $rate, bool $isEu): float
+    {
+        $amountFixed = $rowData['amount'];
+
+        if (($rowData['currency'] !== 'EUR' && $rate > 0)) {
+            $amountFixed = $rowData['amount'] / $rate;
+        }
+
+        return $amountFixed * ($isEu ? 0.01 : 0.02);
+    }
+
+    /**
+     * Check code country alpha2 is European.
+     *
+     * @param string $alpha2
+     * @return bool
+     */
+    public function isEuropeanCode(string $alpha2): bool
+    {
+        return in_array($alpha2, self::EU_ALPHA2_CODES);
+    }
 }
