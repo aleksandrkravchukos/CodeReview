@@ -49,6 +49,10 @@ cs-fix:
 ## Results
 
 Input data variants 
+  with default api services
+
+    docker exec -it php74-cli php app.php input.txt
+   
    with auth Bin service
 
     docker exec -it php74-cli php app.php input.txt --apiBinUrl=https://lookup.binlist.net/ --authBinType=basic --authBinLogin=admin --authBinPassword=pass
