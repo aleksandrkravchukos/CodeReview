@@ -5,7 +5,7 @@ namespace Review\Service;
 class FileService
 {
     /**
-     * Input sample file
+     * Input sample file.
      *
      * @var string
      */

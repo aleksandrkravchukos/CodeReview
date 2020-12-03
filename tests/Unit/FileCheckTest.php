@@ -37,13 +37,7 @@ class FileCheckTest extends TestCase
      */
     public function testInputFileExist(): void
     {
-        $stub = $this->createMock(FileService::class);
-        $stub->expects(self::once())
-            ->method('checkFileExist')
-            ->with($this->inputFile)
-            ->willReturn(true);
-
-        $fileExist = $stub->checkFileExist($this->inputFile );
+        $fileExist = $this->service->checkFileExist($this->inputFile);
         $this->assertFileExists($this->inputFile);
         $this->assertEquals($fileExist, true);
     }
@@ -64,13 +58,7 @@ class FileCheckTest extends TestCase
      */
     public function testFileIsReadable(): void
     {
-        $stub = $this->createMock(FileService::class);
-        $stub->expects(self::once())
-            ->method('checkFileIsReadable')
-            ->with($this->inputFile)
-            ->willReturn(true);
-
-        $readable = $stub->checkFileIsReadable($this->inputFile);
+        $readable = $this->service->checkFileIsReadable($this->inputFile);
 
         $this->assertFileIsReadable($this->inputFile);
         $this->assertEquals($readable, true);
@@ -82,19 +70,13 @@ class FileCheckTest extends TestCase
     public function testGetFileContent(): void
     {
         $expectedText =
-'{"bin":"45717360","amount":"100.00","currency":"EUR"}
+            '{"bin":"45717360","amount":"100.00","currency":"EUR"}
 {"bin":"516793","amount":"50.00","currency":"USD"}
 {"bin":"45417360","amount":"10000.00","currency":"JPY"}
 {"bin":"41417360","amount":"130.00","currency":"USD"}
 {"bin":"4745030","amount":"2000.00","currency":"GBP"}';
 
-        $stub = $this->createMock(FileService::class);
-        $stub->expects(self::once())
-            ->method('getFileContent')
-            ->with($this->inputFile)
-            ->willReturn($expectedText);
-
-        $content = $stub->getFileContent($this->inputFile);
+        $content = $this->service->getFileContent($this->inputFile);
 
         $this->assertEquals($content, $expectedText);
     }

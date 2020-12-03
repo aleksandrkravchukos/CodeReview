@@ -3,6 +3,7 @@
 namespace Review;
 
 use Exception;
+use GuzzleHttp\Client;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -52,7 +53,7 @@ foreach ($argv as $parameter) {
     }
 }
 
-$service = new Service\ReviewService();
+$service = new Service\ReviewService(new Client);
 $fileService = new Service\FileService();
 
 $fileService->setInputFile($inputFile);

@@ -2,6 +2,7 @@
 
 namespace ReviewTest\Unit;
 
+use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Review\Service\ReviewService;
 
@@ -22,7 +23,7 @@ class CalculateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->service = new ReviewService();
+        $this->service = new ReviewService(new Client);
         $this->scale   = 50;
     }
 

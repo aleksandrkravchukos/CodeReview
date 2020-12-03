@@ -2,6 +2,7 @@
 
 namespace ReviewTest\Unit;
 
+use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Review\Service\ReviewService;
 
@@ -29,7 +30,7 @@ class CheckApiTest extends TestCase
     {
         $this->apiBinUrl   = 'https://lookup.binlist.net/';
         $this->apiRatesUrl = 'https://api.exchangeratesapi.io/latest';
-        $this->service     = new ReviewService();
+        $this->service     = new ReviewService(new Client);
     }
 
     /**

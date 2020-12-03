@@ -10,13 +10,14 @@ class ReviewService
     const EU_ALPHA2_CODES           = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
     const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
-    const PERCENT_EU                = 0.01;
-    const PERCENT_NOT_EU            = 0.02;
+    const PERCENT_EU                = "0.01";
+    const PERCENT_NOT_EU            = "0.02";
+    const EUR                       = "EUR";
 
     /**
      * @var string
      */
-    private $apiBinServiceUrl;
+    private string $apiBinServiceUrl;
 
     /**
      * @var string
@@ -30,10 +31,12 @@ class ReviewService
 
     /**
      * ReviewService constructor.
+     *
+     * @param Client $client
      */
-    public function __construct()
+    public function __construct(Client $client)
     {
-        $this->guzzle = new Client();
+        $this->guzzle = $client;
         $this->setApiBinServiceUrl(self::DEFAULT_API_BIN_SERVICE);
         $this->setApiRatesServiceUrl(self::DEFAULT_API_RATES_SERVICE);
     }
