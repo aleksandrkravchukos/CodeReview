@@ -7,17 +7,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ReviewService
 {
-    const EU_ALPHA2_CODES           = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
-    const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
+    const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
+    const DEFAULT_API_BIN_SERVICE = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
-    const PERCENT_EU                = 0.01;
-    const PERCENT_NOT_EU            = 0.02;
-    /**
-     * Input sample file
-     *
-     * @var string
-     */
-    private $inputFile;
+    const PERCENT_EU = 0.01;
+    const PERCENT_NOT_EU = 0.02;
 
     /**
      * @var string
@@ -134,20 +128,22 @@ class ReviewService
      * Calculate amount fixed.
      *
      * @param array $rowData
-     * @param float $rate
+     * @param string $rate
      * @param bool $isEu
      *
-     * @return float
+     * @return string
      */
-    public function calculateAmount(array $rowData, float $rate, bool $isEu): float
+    public function calculateAmount(array $rowData, string $rate, bool $isEu): string
     {
-        $amountFixed = $rowData['amount'];
+        $amountFixed = strval($rowData['amount']);
+        $scale = 5;
 
         if (($rowData['currency'] !== 'EUR' && $rate > 0)) {
-            $amountFixed = $rowData['amount'] / $rate;
+            $scale = 40;
+            $amountFixed = bcdiv(strval($rowData['amount']), $rate, $scale);
         }
 
-        return $amountFixed * ($isEu ? self::PERCENT_EU : self::PERCENT_NOT_EU);
+        return bcmul($amountFixed, ($isEu ? strval(self::PERCENT_EU) : strval(self::PERCENT_NOT_EU)), $scale);
     }
 
     /**
@@ -173,18 +169,18 @@ class ReviewService
      */
     public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
     {
-        $result  = '';
+        $result = '';
         $success = true;
         try {
             $request = $this->guzzle->request($method, $apiServiceUrl, $params);
-            $result  = json_decode($request->getBody()->getContents(), true);
+            $result = json_decode($request->getBody()->getContents(), true);
         } catch (GuzzleException $exception) {
             $success = false;
         }
 
         return [
             'success' => $success,
-            'result'  => $result,
+            'result' => $result,
         ];
     }
 }

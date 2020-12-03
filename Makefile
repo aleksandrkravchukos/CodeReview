@@ -6,6 +6,11 @@ build:
 vendors-install:
 	docker-compose run --rm --no-deps php-cli composer install
 
+## Update the composer dependencies
+vendors-update:
+	docker-compose run --rm --no-deps php-cli composer update
+
+
 ## Copy dist files to actual path (if not present yet)
 copy-dist-configs:
 	docker-compose run --rm --no-deps php-cli cp -n phpunit.xml.dist phpunit.xml

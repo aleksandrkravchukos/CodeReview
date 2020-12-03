@@ -107,7 +107,7 @@ if ($fileService->checkFileExist($inputFile) && $fileService->checkFileIsReadabl
             try {
                 $binResults = $service->getApiServiceData($api. $rowData['bin'], $paramsBin);
                 if (!$binResults['success']) {
-                    $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results from bit api';
+                    $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results from bin api';
                 } else {
 
                     $decodedResults = $binResults['result'];
@@ -117,9 +117,9 @@ if ($fileService->checkFileExist($inputFile) && $fileService->checkFileIsReadabl
                     if (!$getRate['success']) {
                         $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results rates api';
                     } else {
-                        $rate = 0;
+                        $rate = "0";
                         if (isset($getRate['result']['rates'][$rowData['currency']])) {
-                            $rate = $getRate['result']['rates'][$rowData['currency']];
+                            $rate = strval($getRate['result']['rates'][$rowData['currency']]);
                         }
 
                         $isEu = false;
