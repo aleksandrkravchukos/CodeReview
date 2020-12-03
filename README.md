@@ -1,6 +1,9 @@
 # Docker / PHP 7.4 console / composer / phpunit 
 
-Blank docker project for console php 7.4 projects with composer and phpunit.
+Docker project for console php 7.4 projects with composer and phpunit.
+
+#Task 
+[Click here](https://gist.github.com/mariusbalcytis/e73370f4d2bda302c7bd867dfeef9751)
 
 ## Prerequisites
 

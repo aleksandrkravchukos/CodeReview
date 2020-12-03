@@ -7,11 +7,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class ReviewService
 {
-    const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
-    const DEFAULT_API_BIN_SERVICE = 'https://lookup.binlist.net/';
+    const EU_ALPHA2_CODES           = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
+    const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
     const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
-    const PERCENT_EU = 0.01;
-    const PERCENT_NOT_EU = 0.02;
+    const PERCENT_EU                = 0.01;
+    const PERCENT_NOT_EU            = 0.02;
     /**
      * Input sample file
      *
@@ -234,18 +234,18 @@ class ReviewService
      */
     public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
     {
-        $result = '';
+        $result  = '';
         $success = true;
         try {
             $request = $this->guzzle->request($method, $apiServiceUrl, $params);
-            $result = json_decode($request->getBody()->getContents(), true);
+            $result  = json_decode($request->getBody()->getContents(), true);
         } catch (GuzzleException $exception) {
             $success = false;
         }
 
         return [
             'success' => $success,
-            'result' => $result,
+            'result'  => $result,
         ];
     }
 }
