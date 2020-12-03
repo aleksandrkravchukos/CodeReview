@@ -2,6 +2,7 @@
 
 namespace ReviewTest\Unit;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Review\Service\ReviewService;
 
@@ -13,9 +14,15 @@ class CalculateTest extends TestCase
     private $service;
 
     /**
+     * @var MockObject
+     */
+    private $reviewServiceMock;
+
+    /**
      * @var int
      */
     private $scale;
+
     /**
      * Constructor in every test.
      */
@@ -30,11 +37,18 @@ class CalculateTest extends TestCase
      */
     public function testCalculateAmountEURZeroRate(): void
     {
-        $rowData     = json_decode('{"bin":"45717360","amount":"120.00","currency":"EUR"}', true);
-        $rate        = 0;
-        $isEu        = true;
-        $amountFixed = $this->service->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
-        $this->assertEquals($amountFixed, 1.20000);
+        $rowData = json_decode('{"bin":"45717360","amount":"120.00","currency":"EUR"}', true);
+        $rate    = 0;
+        $isEu    = true;
+
+        $stub = $this->createMock(ReviewService::class);
+        $stub->expects(self::once())
+            ->method('calculateAmount')
+            ->with($rowData, strval($rate), $isEu, $this->scale)
+            ->willReturn("1.20000");
+
+        $amountFixed = $stub->calculateAmount($rowData, strval($rate), $isEu, $this->scale);
+        $this->assertEquals($amountFixed, "1.20000");
     }
 
     /**

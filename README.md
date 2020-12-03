@@ -38,6 +38,12 @@ If dist files are not copied to actual destination, then
 Runs container and executes unit tests.
 
     Make unit-tests
+    
+## Run functional tests
+
+Runs container and executes unit tests.
+
+    Make functional-tests
 
 ## Static analysis
 
@@ -47,7 +53,7 @@ Static analysis check
     
 ## Run cs-fixer
     
-    docker-compose run --rm --no-deps php-cli ./vendor/bin/php-cs-fixer fix
+    Make cs-fix
 	    
 ## Results
 
