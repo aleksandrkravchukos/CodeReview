@@ -2,44 +2,13 @@
 
 namespace Review\Service;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-
 class ReviewService
 {
-    const EU_ALPHA2_CODES           = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
-    const DEFAULT_API_BIN_SERVICE   = 'https://lookup.binlist.net/';
-    const DEFAULT_API_RATES_SERVICE = 'https://api.exchangeratesapi.io/latest/';
-    const PERCENT_EU                = "0.01";
-    const PERCENT_NOT_EU            = "0.02";
-    const EUR                       = "EUR";
+    const EU_ALPHA2_CODES = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'];
 
-    /**
-     * @var string
-     */
-    private string $apiBinServiceUrl;
-
-    /**
-     * @var string
-     */
-    private $apiRatesServiceUrl;
-
-    /**
-     * @var Client
-     */
-    private $guzzle;
-
-    /**
-     * ReviewService constructor.
-     *
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->guzzle = $client;
-        $this->setApiBinServiceUrl(self::DEFAULT_API_BIN_SERVICE);
-        $this->setApiRatesServiceUrl(self::DEFAULT_API_RATES_SERVICE);
-    }
+    const PERCENT_EU = "0.01";
+    const PERCENT_NOT_EU = "0.02";
+    const EUR = "EUR";
 
     /**
      * Check if json is valid.
@@ -53,54 +22,6 @@ class ReviewService
         json_decode(trim($content));
 
         return (json_last_error() == JSON_ERROR_NONE);
-    }
-
-    /**
-     * Get api bin service url.
-     *
-     * @return string
-     */
-    public function getApiBinServiceUrl(): string
-    {
-        return $this->apiBinServiceUrl;
-    }
-
-    /**
-     * Set api bin service url.
-     *
-     * @param string $apiBinServiceUrl
-     *
-     * @return ReviewService
-     */
-    public function setApiBinServiceUrl(string $apiBinServiceUrl): ReviewService
-    {
-        $this->apiBinServiceUrl = $apiBinServiceUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get api rates service url.
-     *
-     * @return string
-     */
-    public function getApiRatesServiceUrl(): string
-    {
-        return $this->apiRatesServiceUrl;
-    }
-
-    /**
-     * Set api rates service url.
-     *
-     * @param string $apiRatesServiceUrl
-     *
-     * @return ReviewService
-     */
-    public function setApiRatesServiceUrl(string $apiRatesServiceUrl): ReviewService
-    {
-        $this->apiRatesServiceUrl = $apiRatesServiceUrl;
-
-        return $this;
     }
 
     /**
@@ -158,31 +79,5 @@ class ReviewService
     public function isEuropeanCode(string $alpha2): bool
     {
         return in_array($alpha2, self::EU_ALPHA2_CODES);
-    }
-
-    /**
-     * Get data from api service.
-     *
-     * @param string $apiServiceUrl
-     * @param string $method
-     * @param array $params
-     *
-     * @return array
-     */
-    public function getApiServiceData(string $apiServiceUrl, array $params = [], string $method = 'GET'): array
-    {
-        $result  = '';
-        $success = true;
-        try {
-            $request = $this->guzzle->request($method, $apiServiceUrl, $params);
-            $result  = json_decode($request->getBody()->getContents(), true);
-        } catch (GuzzleException $exception) {
-            $success = false;
-        }
-
-        return [
-            'success' => $success,
-            'result'  => $result,
-        ];
     }
 }

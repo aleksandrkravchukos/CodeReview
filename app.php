@@ -53,18 +53,19 @@ foreach ($argv as $parameter) {
     }
 }
 
-$service = new Service\ReviewService(new Client);
+$service = new Service\ReviewService();
 $fileService = new Service\FileService();
+$apiService = new Service\ApiService(new Client);
 
 $fileService->setInputFile($inputFile);
-$api = $service->getApiBinServiceUrl();
-$ratesApi = $service->getApiRatesServiceUrl();
+$api = $apiService->getApiBinServiceUrl();
+$ratesApi = $apiService->getApiRatesServiceUrl();
 
 $authApiBin = [];
 $paramsBin = [];
 if ($apiBinUrl !== '') {
     $api = $apiBinUrl;
-    $service->setApiBinServiceUrl($apiBinUrl);
+    $apiService->setApiBinServiceUrl($apiBinUrl);
 
     if (isset($authBin['auth']['login']) && isset($authBin['auth']['password']) && isset($authBin['auth']['type'])) {
         $authApiBin = [
@@ -83,7 +84,7 @@ $authApiRates = [];
 $paramsRates = [];
 if ($apiRatesUrl !== '') {
     $ratesApi = $apiRatesUrl;
-    $service->setApiRatesServiceUrl($apiRatesUrl);
+    $apiService->setApiRatesServiceUrl($apiRatesUrl);
 
     if (isset($authBin['auth']['login']) && isset($authBin['auth']['password']) && isset($authBin['auth']['type'])) {
         $authApiRates = [
@@ -111,14 +112,14 @@ if ($fileService->checkFileExist($inputFile) && $fileService->checkFileIsReadabl
 
         if ($service->isArrayRowData($rowData) && $service->validate($rowData)) {
             try {
-                $binResults = $service->getApiServiceData($api. $rowData['bin'], $paramsBin);
+                $binResults = $apiService->getApiServiceData($api. $rowData['bin'], $paramsBin);
                 if (!$binResults['success']) {
                     $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results from bin api';
                 } else {
 
                     $decodedResults = $binResults['result'];
 
-                    $getRate = $service->getApiServiceData($ratesApi, $paramsRates);
+                    $getRate = $apiService->getApiServiceData($ratesApi, $paramsRates);
 
                     if (!$getRate['success']) {
                         $errors[] = 'bin ' . $rowData['bin'] . ' have incorrect results rates api';

@@ -18,7 +18,7 @@ class ContentCheckTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->service = new ReviewService(new Client);
+        $this->service = new ReviewService();
     }
 
     /**

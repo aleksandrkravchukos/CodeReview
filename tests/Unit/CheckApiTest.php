@@ -4,12 +4,12 @@ namespace ReviewTest\Unit;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
-use Review\Service\ReviewService;
+use Review\Service\ApiService;
 
 class CheckApiTest extends TestCase
 {
     /**
-     * @var ReviewService
+     * @var ApiService
      */
     private $service;
 
@@ -28,9 +28,9 @@ class CheckApiTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->apiBinUrl   = 'https://lookup.binlist.net/';
+        $this->apiBinUrl = 'https://lookup.binlist.net/';
         $this->apiRatesUrl = 'https://api.exchangeratesapi.io/latest';
-        $this->service     = new ReviewService(new Client);
+        $this->service = new ApiService(new Client);
     }
 
     /**
