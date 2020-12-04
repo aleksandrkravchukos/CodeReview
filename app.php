@@ -86,7 +86,7 @@ if ($apiRatesUrl !== '') {
     $ratesApi = $apiRatesUrl;
     $apiService->setApiRatesServiceUrl($apiRatesUrl);
 
-    if (isset($authBin['auth']['login']) && isset($authBin['auth']['password']) && isset($authBin['auth']['type'])) {
+    if (isset($authRates['auth']['login']) && isset($authRates['auth']['password']) && isset($authRates['auth']['type'])) {
         $authApiRates = [
             'auth' => [
                 $paramsRates['auth']['login'],
